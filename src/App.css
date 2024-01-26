@@ -1,0 +1,306 @@
+body {
+  scroll-behavior: smooth;
+}
+
+canvas {
+  touch-action: none;
+  /* animation: fade-in 1.5s ease 0.5s forwards; */
+}
+
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+:root {
+	font-size: 12px;
+	--color-text: #f0f0f0;
+	--color-bg: #0f0e0e;
+	--color-link: #aaa;
+	--color-link-hover: #fff;
+	--color-title: #7f7f8f;
+	--color-year: #b9b3af;
+	--img-ratio: 1.5;
+	--s: 1;
+}
+
+body {
+	margin: 0;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	font-family: "area-normal", sans-serif;
+	font-weight: 600;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	width: 100%;
+	overflow-x: hidden;
+}
+
+.demo-2 {
+	--color-text: #ffffff;
+    --color-bg: #750300;
+    --color-link: #e9807e;
+    --color-link-hover: #fff;
+    --color-title: #ffc982;
+    --color-year: #ffffff;
+}
+
+.demo-3 {
+	--s: 4;
+
+	--color-text: #f9e7ea;
+    --color-bg: #000000;
+    --color-link: #6e98e0;
+    --color-link-hover: #f9e7ea;
+    --color-title: #d29fbe;
+    --color-year: #6177b7;
+}
+
+.demo-4 {
+	--img-ratio: 1;
+	--s: 2;
+
+	--color-text: #000000;
+    --color-bg: #85827a;
+    --color-link: #c7bea7;
+    --color-link-hover: #000;
+    --color-title: #000000;
+    --color-year: #b9b3af;
+}
+
+/* Page Loader */
+.js .loading::before,
+.js .loading::after {
+	content: '';
+	position: fixed;
+	z-index: 1000;
+}
+
+.js .loading::before {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: var(--color-bg);
+}
+
+.js .loading::after {
+	top: 50%;
+	left: 50%;
+	width: 60px;
+	height: 60px;
+	margin: -30px 0 0 -30px;
+	opacity: 0.4;
+	background: var(--color-link);
+	animation: loaderAnim 0.7s linear infinite alternate forwards;
+
+}
+
+@keyframes loaderAnim {
+	to {
+		opacity: 1;
+		transform: scale3d(0.7,0.7,1);
+	}
+}
+
+a {
+	text-decoration: none;
+	color: var(--color-link);
+	outline: none;
+	cursor: pointer;
+}
+
+a:hover {
+	color: var(--color-link-hover);
+	outline: none;
+}
+
+/* Better focus styles from https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible */
+a:focus {
+	/* Provide a fallback style for browsers
+	 that don't support :focus-visible */
+	outline: none;
+}
+
+a:focus-visible {
+	/* Draw a very noticeable focus style for
+	 keyboard-focus on browsers that do support
+	 :focus-visible */
+	outline: 2px solid red;
+}
+
+.unbutton {
+	background: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	cursor: pointer;
+}
+
+.unbutton:focus {
+	outline: none;
+}
+
+.frame {
+	position: relative;
+	padding: 2rem 3rem;
+	display: grid;
+	min-height: 400px;
+	width: 100%;
+	grid-template-columns: auto auto 1fr 1fr;
+	grid-template-areas: 'prev back ... sponsor' 'title title title title' 'demos demos demos demos' ;
+	grid-row-gap: 1rem;
+	grid-column-gap: 2rem;
+	pointer-events: none;
+	justify-items: start;
+}
+
+.frame a {
+	pointer-events: auto;
+}
+
+.frame__title {
+	grid-area: title;
+	font-size: clamp(1.5rem, 10vw,5rem);
+	margin: 0;
+	font-weight: 300;
+	max-width: 600px;
+	line-height: 1.2;
+}
+
+.frame__back {
+	grid-area: back;
+	justify-self: start;
+}
+
+.frame__prev {
+	grid-area: prev;
+	justify-self: start;
+}
+
+.frame__demos {
+	grid-area: demos;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	align-self: start;
+	flex-wrap: wrap;
+}
+
+.frame__demos-item:not(:first-child) {
+	width: 2rem;
+	display: block;
+	flex: none;
+	border-radius: 10px;
+	aspect-ratio: 1;
+	display: grid;
+	place-items: center;
+}
+
+span.frame__demos-item:not(:first-child) {
+	border-color: #fff;
+}
+
+.grid {
+	width: 100%;
+	grid-template-columns: repeat(8,1fr);
+	grid-auto-rows: auto;
+	display: grid;
+	position: relative;
+	margin: 10vh auto 50vh;
+}
+
+.grid__item {
+    grid-column: var(--c) / span var(--s);
+    grid-row: var(--r);
+    position: relative;
+    margin: 0;
+}
+
+.grid__item-img {
+	position: relative;
+	overflow: hidden;
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: auto;
+	aspect-ratio: var(--img-ratio);
+}
+
+.grid__item-img-inner {
+	width: 100%;
+	height: 100%;
+	background-position: 50%;
+	background-size: cover;
+	position: relative;
+}
+
+.grid__item-caption {
+	position: absolute;
+	padding: 0.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.grid__item-caption h3 {
+	font-weight: bold;
+	font-size: inherit;
+	margin: 0;
+	color: var(--color-title);
+}
+
+.grid__item-caption span {
+	font-weight: bold;
+	color: var(--color-year);
+}
+
+.outro {
+	display: grid;
+	place-items: center;
+	margin: 40vh 0;
+}
+
+.outro__title {
+	font-weight: 300;
+	font-size: clamp(1.5rem,10vw,2rem);
+}
+
+.card-wrap {
+	margin-top: 5vh;
+	display: grid;
+	grid-gap: 2rem;
+	grid-auto-flow: row;
+	grid-template-columns: 250px;
+	text-align: center;
+}
+
+.card__image {
+	display: block;
+	border-radius: 7px;
+	background-size: cover;
+	background-position: 50% 50%;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	filter: contrast(0.95);
+}
+
+.card__title {
+	font-weight: 300;
+}
+
+.credits {
+	font-size: 1.5rem;
+	text-align: center;
+	margin: 50vh auto 0;
+	padding-bottom: 50vh;
+}
+
+@media screen and (min-width: 53em) {
+	.card-wrap {
+		grid-template-columns: repeat(2,300px);
+	}
+}
