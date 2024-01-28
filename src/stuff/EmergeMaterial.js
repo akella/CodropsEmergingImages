@@ -5,9 +5,10 @@ import { extend } from "@react-three/fiber";
 import * as THREE from "three";
 const EmergeMaterial = shaderMaterial(
   {
-    time: 0,
+    uTime: 0,
     uFillColor: new THREE.Color("#f60"),
     uProgress: 0,
+    uType: 0,
     uTexture: null,
     uTextureSize: new THREE.Vector2(0, 0),
     uElementSize: new THREE.Vector2(0, 0),
@@ -22,9 +23,10 @@ const EmergeMaterial = shaderMaterial(
     `,
   // fragment shader
   /*glsl*/ `
-      uniform float time;
+      uniform float uTime;
       uniform vec3 uFillColor;
       uniform float uProgress;
+      uniform float uType;
       uniform vec2 uTextureSize;
       uniform vec2 uElementSize;
       uniform sampler2D uTexture;
@@ -57,6 +59,51 @@ const EmergeMaterial = shaderMaterial(
       
       vec3 blendSubtract(vec3 base, vec3 blend, float opacity) {
         return (blendSubtract(base, blend) * opacity + base * (1.0 - opacity));
+      }
+      float hashwithoutsine12(vec2 p){
+        vec3 p3  = fract(vec3(p.xyx) * .1031);
+          p3 += dot(p3, p3.yzx + 33.33);
+          return fract((p3.x + p3.y) * p3.z);
+      }
+
+      //	Classic Perlin 2D Noise 
+      //	by Stefan Gustavson
+      //
+      vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+      vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+      vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+      vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
+      float cnoise(vec2 P){
+        vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+        vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+        Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+        vec4 ix = Pi.xzxz;
+        vec4 iy = Pi.yyww;
+        vec4 fx = Pf.xzxz;
+        vec4 fy = Pf.yyww;
+        vec4 i = permute(permute(ix) + iy);
+        vec4 gx = 2.0 * fract(i * 0.0243902439) - 1.0; // 1/41 = 0.024...
+        vec4 gy = abs(gx) - 0.5;
+        vec4 tx = floor(gx + 0.5);
+        gx = gx - tx;
+        vec2 g00 = vec2(gx.x,gy.x);
+        vec2 g10 = vec2(gx.y,gy.y);
+        vec2 g01 = vec2(gx.z,gy.z);
+        vec2 g11 = vec2(gx.w,gy.w);
+        vec4 norm = 1.79284291400159 - 0.85373472095314 * 
+          vec4(dot(g00, g00), dot(g01, g01), dot(g10, g10), dot(g11, g11));
+        g00 *= norm.x;
+        g01 *= norm.y;
+        g10 *= norm.z;
+        g11 *= norm.w;
+        float n00 = dot(g00, vec2(fx.x, fy.x));
+        float n10 = dot(g10, vec2(fx.y, fy.y));
+        float n01 = dot(g01, vec2(fx.z, fy.z));
+        float n11 = dot(g11, vec2(fx.w, fy.w));
+        vec2 fade_xy = fade(Pf.xy);
+        vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
+        float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
+        return 2.3 * n_xy;
       }
       
       
@@ -111,6 +158,9 @@ const EmergeMaterial = shaderMaterial(
         float p = 2.0 * t * t;
         return t < 0.5 ? p : -p + (4.0 * t) - 1.0;
       }
+      float parabola( float x, float k ) {
+        return pow( 4. * x * ( 1. - x ), k );
+      }
       void main() {
         //  texture cover
         vec2 uv = vUv - vec2(0.5);
@@ -119,50 +169,141 @@ const EmergeMaterial = shaderMaterial(
         if(aspect1>aspect2){uv *= vec2( aspect2/aspect1,1.);} 
         else{uv *= vec2( 1.,aspect1/aspect2);}
         uv += vec2(0.5);
+        float uAspect = uElementSize.x/uElementSize.y;
 
         vec4 defaultColor = texture2D(uTexture, uv);
   
   
         
+
+        // first transition
+        if(uType==0.){
   
-        float uAspect = uElementSize.x/uElementSize.y;
-        // pixelize
-        float pixelateProgress = map(uProgress,0.3,1.,0.,1.);
-        pixelateProgress = floor(pixelateProgress*12.)/12.;
-        float s = floor(mix(10., 50.,quadraticOut(pixelateProgress)));
-        vec2 gridSize = vec2(
-          s, 
-          floor(s/uAspect)
-        );
+          
+          // pixelize
+          float pixelateProgress = map(uProgress,0.3,1.,0.,1.);
+          pixelateProgress = floor(pixelateProgress*12.)/12.;
+          float s = floor(mix(10., 50.,quadraticOut(pixelateProgress)));
+          vec2 gridSize = vec2(
+            s, 
+            floor(s/uAspect)
+          );
 
-        vec2 newUV = floor(vUv * gridSize) / gridSize + 0.5/vec2(gridSize);
-        vec4 color = texture2D(uTexture, newUV);
-        float finalProgress = map(uProgress,0.75,1.,0.,1.);
-        color = mix(color, defaultColor, finalProgress);
-
-
-        // grid lines
-        vec2 multUV = fract(vUv * gridSize);
-        float lines = PristineGrid(vUv * gridSize, vec2(0.2*(1.-uProgress)));
+          vec2 newUV = floor(vUv * gridSize) / gridSize + 0.5/vec2(gridSize);
+          vec4 color = texture2D(uTexture, newUV);
+          float finalProgress = map(uProgress,0.75,1.,0.,1.);
+          color = mix(color, defaultColor, finalProgress);
 
 
-        // discard - slide in animation
-        float discardProgress = map(uProgress,0.,0.8,0.,1.);
-        if(vUv.x>cubicOut(discardProgress)) discard;
+          // grid lines
+          vec2 multUV = fract(vUv * gridSize);
+          float lines = PristineGrid(vUv * gridSize, vec2(0.2*(1.-uProgress)));
 
 
-        // fill color
-        vec3 fillColor = uFillColor;
-        float gradWidth = mix(0.4,0.2,uProgress);
-        float customProg = map(cubicInOut(uProgress), 0.0, 1., -gradWidth, 1. - gradWidth);
-        float fillGradient = smoothstep(customProg, customProg+gradWidth, vUv.x);
+          // discard - slide in animation
+          float discardProgress = map(uProgress,0.,0.8,0.,1.);
+          if(vUv.x>cubicOut(discardProgress)) discard;
+
+
+          // fill color
+          vec3 fillColor = uFillColor;
+          float gradWidth = mix(0.4,0.2,uProgress);
+          float customProg = map(cubicInOut(uProgress), 0.0, 1., -gradWidth, 1. - gradWidth);
+          float fillGradient = smoothstep(customProg, customProg+gradWidth, vUv.x);
 
 
 
-        gl_FragColor.a = 1.;
-        gl_FragColor.rgb = blendNormal(vec3(1.-lines),color.rgb , 0.9);
-        gl_FragColor.rgb = mix( gl_FragColor.rgb,fillColor, fillGradient);
-        gl_FragColor.rgb = mix( gl_FragColor.rgb,defaultColor.rgb, finalProgress);
+          gl_FragColor.a = 1.;
+          gl_FragColor.rgb = blendNormal(vec3(1.-lines),color.rgb , 0.9);
+          gl_FragColor.rgb = mix( gl_FragColor.rgb,fillColor, fillGradient);
+          gl_FragColor.rgb = mix( gl_FragColor.rgb,defaultColor.rgb, finalProgress);
+        }else if(uType==1.){
+
+          float hash = hashwithoutsine12(vUv*1000. + floor(uTime*3.)*0.1);
+          float hash1 = hashwithoutsine12(vUv*1000. + 10. + floor(uTime*3.)*0.1);
+          float hash2 = hashwithoutsine12(vUv*1000. + 20. + floor(uTime*3.)*0.1);
+          vec3 fillColor = uFillColor;
+          fillColor +=  (vec3(hash)-vec3(0.5))*0.2;
+
+
+          float n = (cnoise(vUv*vec2(35.,1.)) + 1.)*0.5;
+          float border = 1.;
+          // float border = n + vUv.x;
+          // float threshold = 0.8;
+          // border = smoothstep(threshold, threshold+0.01, border);
+
+          
+          float dt = parabola( cubicInOut(uProgress),1.);
+          vec2 distUV = vUv;
+          distUV.y = 1.-(1.-vUv.y)*(1. -dt*0.5) ;
+          defaultColor = texture2D(uTexture, distUV);
+          float width = 1.;
+          float w = width*dt;
+
+          float maskvalue = smoothstep(1. - w,1.,vUv.y + mix(-w/2., 1. - w/2., cubicInOut(uProgress)));
+          float maskvalue0 = smoothstep(1.,1.,vUv.y + cubicInOut(uProgress));
+
+
+
+          float mask = maskvalue + maskvalue*n;
+          // float mask = maskvalue;
+
+          float final = smoothstep(border,border+0.01,mask);
+          float dist = -0.5;
+          float final1 = smoothstep(border,border+0.01,mask-dist);
+          if(final1==0.) discard;
+
+
+          vec3 finalColor = mix(fillColor,defaultColor.rgb,final);
+            
+
+
+          gl_FragColor = vec4(finalColor,1.);
+
+
+        } else if(uType==2.){
+
+          float s = 120.;
+
+          vec2 gridSize = vec2(
+            s, 
+            floor(s/uAspect)
+          );
+
+          vec2 newUV = floor(vUv * gridSize);
+
+          float x = floor(vUv.x * 10.);
+          float y = floor(vUv.y * 10.);
+          float pattern = hashwithoutsine12(newUV);
+
+          float w = 0.5;
+          // float p0 = uProgress;
+
+          float p0 = (clamp( (uProgress - 0.2*0.)/0.8,0.,1.));
+
+          float p1 = (clamp( (uProgress - 0.2*1.)/0.8,0.,1.));
+
+
+          p0  = map(p0, 0., 1., -w,  1.);
+          p0 = smoothstep(p0,p0+w,1.-vUv.y);
+          float p0_ = clamp(1. - 2.*p0 +pattern,0.,1.);
+
+
+
+          p1  = map(p1, 0., 1., -w,  1.);
+          p1 = smoothstep(p1,p1+w,1.-vUv.y);
+          float p1_ = clamp(1. - 2.*p1 +pattern,0.,1.);
+
+
+          
+
+
+          vec3 finalColor = uFillColor;
+        finalColor = mix( finalColor,defaultColor.rgb,p1_);
+
+          gl_FragColor = vec4(vec3(p0_,p1_,0.),p0_);
+          gl_FragColor = vec4(finalColor,p0_);
+        }
 
 
       }

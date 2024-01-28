@@ -23,6 +23,14 @@ export default function EmergingImage({ ...props }) {
       });
       // texture.colorSpace = THREE.SRGBColorSpace
     }, []);
+
+    useEffect(() => {
+      
+      if(refMesh) {
+        refMesh.material.uProgress = 0
+        refMesh.material.uType = props.type
+      }
+    },[props.type])
   
     useGSAP(() => {
       if (refMesh?.material) {
@@ -32,7 +40,7 @@ export default function EmergingImage({ ...props }) {
           ease: "none",
         });
       }
-    }, [isIntersecting]);
+    }, [isIntersecting,props.type]);
   
     // scroll check
     // only set intersecting if refMesh is available, important

@@ -188,7 +188,12 @@ a:focus-visible {
 	align-self: start;
 	flex-wrap: wrap;
 }
-
+.frame__demos-item{
+	cursor: pointer;
+}
+.frame__demos-item.is-active{
+	border:1px solid #fff;
+}
 .frame__demos-item:not(:first-child) {
 	width: 2rem;
 	display: block;
