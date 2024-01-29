@@ -5,9 +5,16 @@ import { useGSAP } from "@gsap/react";
 import { useLayoutEffect } from "react";
 import * as THREE from "three";
 import useScreenSize from "../stuff/useScreenSize";
-import { View } from "@react-three/drei";
+import { OrbitControls, View } from "@react-three/drei";
+
+import { useControls } from 'leva'
+
+
 
 export default function EmergingImage({ ...props }) {
+
+    const { fillColor } = useControls({ fillColor: '#f00', })
+  
     const [refMesh, setRefMesh] = useState(null);
     const [texture, setTexture] = useState(null);
     const [textureSize, setTextureSize] = useState([0, 0]);
@@ -68,7 +75,7 @@ export default function EmergingImage({ ...props }) {
       <View {...props} ref={ref}>
         <mesh ref={setRefMesh}>
           <emergeMaterial
-            color={new THREE.Color(0.2, 0.0, 0.1)}
+            uFillColor={new THREE.Color(fillColor)}
             transparent={true}
             uTexture={texture}
             uTextureSize={new THREE.Vector2(textureSize[0], textureSize[1])}
