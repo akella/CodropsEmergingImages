@@ -1,5 +1,8 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import {View,OrthographicCamera, Preload} from '@react-three/drei'
+
+
+
 
 
 export default function Scene(){

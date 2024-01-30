@@ -228,14 +228,10 @@ const EmergeMaterial = shaderMaterial(
 
           float n = (cnoise(vUv*vec2(35.,1.)) + 1.)*0.5;
           float border = 1.;
-          // float border = n + vUv.x;
-          // float threshold = 0.8;
-          // border = smoothstep(threshold, threshold+0.01, border);
-
           
           float dt = parabola( cubicInOut(uProgress),1.);
           vec2 distUV = vUv;
-          distUV.y = 1.-(1.-vUv.y)*(1. -dt*0.5) ;
+          distUV.y = 1.-(1.-vUv.y)*(1. -dt*0.3) ;
           defaultColor = texture2D(uTexture, distUV);
           float width = 1.;
           float w = width*dt;
@@ -243,23 +239,16 @@ const EmergeMaterial = shaderMaterial(
           float maskvalue = smoothstep(1. - w,1.,vUv.y + mix(-w/2., 1. - w/2., cubicInOut(uProgress)));
           float maskvalue0 = smoothstep(1.,1.,vUv.y + cubicInOut(uProgress));
 
-
-
           float mask = maskvalue + maskvalue*n;
           // float mask = maskvalue;
 
-          float final = smoothstep(border,border+0.01,mask);
+          float final = smoothstep(1.,1.+0.01,mask);
           float dist = -0.5;
-          float final1 = smoothstep(border,border+0.01,mask-dist);
+          float final1 = smoothstep(1.,1.+0.01,mask-dist);
           if(final1==0.) discard;
 
-
           vec3 finalColor = mix(fillColor,defaultColor.rgb,final);
-            
-
-
           gl_FragColor = vec4(finalColor,1.);
-
 
         } else if(uType==2.){
 
@@ -296,13 +285,35 @@ const EmergeMaterial = shaderMaterial(
 
 
           
-
-
-          vec3 finalColor = uFillColor;
-        finalColor = mix( finalColor,defaultColor.rgb,p1_);
+          vec3 finalColor = mix( uFillColor,defaultColor.rgb,p1_);
 
           gl_FragColor = vec4(vec3(p0_,p1_,0.),p0_);
           gl_FragColor = vec4(finalColor,p0_);
+        }  else if(uType==3.){
+
+          float progress = cubicInOut(1.-uProgress);
+          float s = 40.;
+          vec2 gridSize = vec2(
+            s, 
+            floor(s/uAspect)
+          );
+
+          // curtain
+          float v = smoothstep(0.0, 1.0, vUv.y + sin(vUv.x*4.0+progress*6.0) * mix(0.3, 0.1, abs(0.5-vUv.x)) * 0.5 * smoothstep(0.0, 0.2, progress) + (1.0 - progress * 2.0));
+
+          float mixnewUV =(vUv.x * 3. + (1.0-v) * 50.0)*progress;
+	        vec2 subUv = mix(vUv, floor(vUv * gridSize) / gridSize, mixnewUV);
+
+          vec4 color = texture2D(uTexture, subUv);
+          color.a =  mix(1.0, pow(v, 5.0) , step(0.0, progress));
+          color.a = pow(v, 1.0);
+          // mix some color
+          color.rgb = mix(color.rgb, uFillColor, smoothstep(0.5, 0.0, abs(0.5-color.a)) * progress);
+
+
+	        gl_FragColor = color;
+
+
         }
 
 

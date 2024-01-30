@@ -13,7 +13,7 @@ import { useControls } from 'leva'
 
 export default function EmergingImage({ ...props }) {
 
-    const { fillColor } = useControls({ fillColor: '#f00', })
+    const { fillColor } = useControls({ fillColor: '#f60', })
   
     const [refMesh, setRefMesh] = useState(null);
     const [texture, setTexture] = useState(null);
@@ -75,7 +75,7 @@ export default function EmergingImage({ ...props }) {
       <View {...props} ref={ref}>
         <mesh ref={setRefMesh}>
           <emergeMaterial
-            uFillColor={new THREE.Color(fillColor)}
+            uFillColor={new THREE.Color(fillColor).convertLinearToSRGB()}
             transparent={true}
             uTexture={texture}
             uTextureSize={new THREE.Vector2(textureSize[0], textureSize[1])}
