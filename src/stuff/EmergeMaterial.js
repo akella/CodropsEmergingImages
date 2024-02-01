@@ -8,6 +8,7 @@ const EmergeMaterial = shaderMaterial(
     uTime: 0,
     uFillColor: new THREE.Color("#f60"),
     uProgress: 0,
+    uPixels: null,
     uType: 0,
     uTexture: null,
     uTextureSize: new THREE.Vector2(0, 0),
@@ -27,6 +28,7 @@ const EmergeMaterial = shaderMaterial(
       uniform vec3 uFillColor;
       uniform float uProgress;
       uniform float uType;
+      uniform float uPixels[36];
       uniform vec2 uTextureSize;
       uniform vec2 uElementSize;
       uniform sampler2D uTexture;
@@ -230,7 +232,7 @@ const EmergeMaterial = shaderMaterial(
           float border = 1.;
           
           float dt = parabola( cubicInOut(uProgress),1.);
-          vec2 distUV = vUv;
+          vec2 distUV = uv;
           distUV.y = 1.-(1.-vUv.y)*(1. -dt*0.3) ;
           defaultColor = texture2D(uTexture, distUV);
           float width = 1.;
@@ -302,7 +304,7 @@ const EmergeMaterial = shaderMaterial(
           float v = smoothstep(0.0, 1.0, vUv.y + sin(vUv.x*4.0+progress*6.0) * mix(0.3, 0.1, abs(0.5-vUv.x)) * 0.5 * smoothstep(0.0, 0.2, progress) + (1.0 - progress * 2.0));
 
           float mixnewUV =(vUv.x * 3. + (1.0-v) * 50.0)*progress;
-	        vec2 subUv = mix(vUv, floor(vUv * gridSize) / gridSize, mixnewUV);
+	        vec2 subUv = mix(uv, floor(uv * gridSize) / gridSize, mixnewUV);
 
           vec4 color = texture2D(uTexture, subUv);
           color.a =  mix(1.0, pow(v, 5.0) , step(0.0, progress));
@@ -314,7 +316,23 @@ const EmergeMaterial = shaderMaterial(
 	        gl_FragColor = color;
 
 
+        } else if(uType==4.){
+          int indexProgress = int(uProgress*36.);
+          float pixellation = floor(uElementSize.x*uPixels[indexProgress]);
+
+          vec2 gridSize = vec2(
+            pixellation, 
+            floor(pixellation/uAspect)
+          );
+          vec2 newUV = floor(uv * gridSize) / gridSize + 0.5/vec2(gridSize);
+          vec4 color = texture2D(uTexture, newUV);
+          gl_FragColor = color;
+
+
+
         }
+        
+        gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1./2.2));
 
 
       }

@@ -10,6 +10,8 @@ import { OrbitControls, View } from "@react-three/drei";
 import { useControls } from 'leva'
 
 
+const PIXELS =  [1, 1.5, 2, 2.5, 3, 1, 1.5, 2, 2.5, 3, 3.5, 4, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 20, 100].map((v) => v/100)
+
 
 export default function EmergingImage({ ...props }) {
 
@@ -25,10 +27,10 @@ export default function EmergingImage({ ...props }) {
   
     useEffect(() => {
       new THREE.TextureLoader().loadAsync(props.url).then((data) => {
+        // data.colorSpace = THREE.LinearSRGBColorSpace;
         setTextureSize([data.source.data.width, data.source.data.height]);
         setTexture(data);
       });
-      // texture.colorSpace = THREE.SRGBColorSpace
     }, []);
 
     useEffect(() => {
@@ -75,9 +77,10 @@ export default function EmergingImage({ ...props }) {
       <View {...props} ref={ref}>
         <mesh ref={setRefMesh}>
           <emergeMaterial
-            uFillColor={new THREE.Color(fillColor).convertLinearToSRGB()}
+            uFillColor={new THREE.Color(fillColor)}
             transparent={true}
             uTexture={texture}
+            uPixels={PIXELS}
             uTextureSize={new THREE.Vector2(textureSize[0], textureSize[1])}
             uElementSize={new THREE.Vector2(elementSize[0], elementSize[1])}
           />

@@ -47,6 +47,9 @@ function App() {
             <a className="frame__demos-item" onClick={() => setType(3)}>
               4
             </a>
+            <a className="frame__demos-item" onClick={() => setType(4)}>
+              5
+            </a>
           </nav>
         </div>
         <div className="grid">
