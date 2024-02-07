@@ -183,7 +183,7 @@ a:focus-visible {
 	position: relative;
 	margin: 10vh auto 50vh;
 	padding: 0 3rem;
-	gap: 3vw;
+	grid-row-gap: 3rem;
 }
 
 .grid__item {
@@ -276,6 +276,7 @@ a:focus-visible {
 		grid-template-columns: repeat(2,300px);
 	}
 	.grid {
+		gap: 3vw;
 		grid-template-columns: repeat(10,1fr);
 		grid-auto-rows: auto;
 	}
