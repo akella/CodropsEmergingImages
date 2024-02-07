@@ -11,8 +11,8 @@ const EmergeMaterial = shaderMaterial(
     uPixels: null,
     uType: 0,
     uTexture: null,
-    uTextureSize: new THREE.Vector2(0, 0),
-    uElementSize: new THREE.Vector2(0, 0),
+    uTextureSize: null,
+    uElementSize: null,
   },
   // vertex shader
   /*glsl*/ `
@@ -172,6 +172,7 @@ const EmergeMaterial = shaderMaterial(
         else{uv *= vec2( 1.,aspect1/aspect2);}
         uv += vec2(0.5);
         float uAspect = uElementSize.x/uElementSize.y;
+        float imageAspect = uTextureSize.x/uTextureSize.y;
 
         vec4 defaultColor = texture2D(uTexture, uv);
   
@@ -185,7 +186,7 @@ const EmergeMaterial = shaderMaterial(
           // pixelize
           float pixelateProgress = map(uProgress,0.3,1.,0.,1.);
           pixelateProgress = floor(pixelateProgress*12.)/12.;
-          float s = floor(mix(10., 50.,quadraticOut(pixelateProgress)));
+          float s = floor(mix(11., 50.,quadraticOut(pixelateProgress)));
           vec2 gridSize = vec2(
             s, 
             floor(s/uAspect)
@@ -219,6 +220,9 @@ const EmergeMaterial = shaderMaterial(
           gl_FragColor.rgb = blendNormal(vec3(1.-lines),color.rgb , 0.9);
           gl_FragColor.rgb = mix( gl_FragColor.rgb,fillColor, fillGradient);
           gl_FragColor.rgb = mix( gl_FragColor.rgb,defaultColor.rgb, finalProgress);
+
+
+          
         }else if(uType==1.){
 
           float hash = hashwithoutsine12(vUv*1000. + floor(uTime*3.)*0.1);
@@ -293,11 +297,11 @@ const EmergeMaterial = shaderMaterial(
           gl_FragColor = vec4(finalColor,p0_);
         }  else if(uType==3.){
 
-          float progress = cubicInOut(1.-uProgress);
-          float s = 40.;
+          float progress = quadraticInOut(1.-uProgress);
+          float s = 50.;
           vec2 gridSize = vec2(
             s, 
-            floor(s/uAspect)
+            floor(s/imageAspect)
           );
 
           // curtain
@@ -315,21 +319,18 @@ const EmergeMaterial = shaderMaterial(
 
 	        gl_FragColor = color;
 
-
-        } else if(uType==4.){
+        } 
+        else if(uType==4.){
           int indexProgress = int(uProgress*36.);
           float pixellation = floor(uElementSize.x*uPixels[indexProgress]);
 
           vec2 gridSize = vec2(
             pixellation, 
-            floor(pixellation/uAspect)
+            floor(pixellation/imageAspect)
           );
           vec2 newUV = floor(uv * gridSize) / gridSize + 0.5/vec2(gridSize);
           vec4 color = texture2D(uTexture, newUV);
           gl_FragColor = color;
-
-
-
         }
         
         gl_FragColor.rgb = pow(gl_FragColor.rgb,vec3(1./2.2));
