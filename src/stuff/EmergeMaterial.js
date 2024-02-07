@@ -233,7 +233,7 @@ const EmergeMaterial = shaderMaterial(
           
           float dt = parabola( cubicInOut(uProgress),1.);
           vec2 distUV = uv;
-          distUV.y = 1.-(1.-vUv.y)*(1. -dt*0.3) ;
+          distUV.y = 1.-(1.-uv.y)*(1. -dt*0.3) ;
           defaultColor = texture2D(uTexture, distUV);
           float width = 1.;
           float w = width*dt;

@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const nav = [...document.querySelectorAll(".frame__demos-item")];
     nav.forEach((el) => el.classList.remove("is-active"));
-    nav[type + 1].classList.add("is-active");
+    nav[type].classList.add("is-active");
   }, [type]);
 
   return (
