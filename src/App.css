@@ -16,12 +16,12 @@ canvas {
 :root {
 	font-size: 12px;
 	--color-text: #f0f0f0;
-	--color-bg: #0f0e0e;
-	--color-link: #aaa;
+	--color-bg: #101014;
+	--color-link: #818798;
 	--color-link-hover: #fff;
 	--color-title: #7f7f8f;
 	--color-year: #b9b3af;
-	--img-ratio: 1.5;
+	--img-ratio: 1.3;
 	--s: 1;
 }
 
@@ -116,9 +116,10 @@ a:focus-visible {
 	padding: 2rem 3rem;
 	display: grid;
 	width: 100%;
+	min-height: 40vh;
 	grid-template-columns: min-content min-content auto 260px;
 	grid-template-areas: 'prev back sponsor ...' 'title title title title' 'demos demos demos demos'  ;
-	grid-row-gap: 1rem;
+	grid-row-gap: 5vh;
 	grid-column-gap: 2rem;
 	pointer-events: none;
 	justify-items: start;
@@ -132,9 +133,9 @@ a:focus-visible {
 	grid-area: title;
 	font-size: clamp(1.5rem, 10vw,5rem);
 	margin: 0;
-	font-weight: 300;
-	max-width: 600px;
 	line-height: 1.2;
+	font-family: "gabriella", sans-serif;
+	font-weight: 900;
 }
 
 .frame__back {
@@ -163,7 +164,7 @@ a:focus-visible {
 }
 
 .frame__demos-item.is-active{
-	border: 1px solid #fff;
+	border: 1px solid;
 }
 
 .frame__demos-item {
@@ -178,8 +179,6 @@ a:focus-visible {
 
 .grid {
 	width: 100%;
-	grid-template-columns: repeat(8,1fr);
-	grid-auto-rows: auto;
 	display: grid;
 	position: relative;
 	margin: 10vh auto 50vh;
@@ -188,8 +187,6 @@ a:focus-visible {
 }
 
 .grid__item {
-    grid-column: var(--c) / span var(--s);
-    grid-row: var(--r);
     position: relative;
     margin: 0;
 }
@@ -278,4 +275,12 @@ a:focus-visible {
 	.card-wrap {
 		grid-template-columns: repeat(2,300px);
 	}
+	.grid {
+		grid-template-columns: repeat(10,1fr);
+		grid-auto-rows: auto;
+	}
+	.grid__item {
+    grid-column: var(--c) / span var(--s);
+    grid-row: var(--r);
+  }
 }

@@ -15,13 +15,14 @@ function App() {
   useEffect(() => {
     const nav = [...document.querySelectorAll(".frame__demos-item")];
     nav.forEach((el) => el.classList.remove("is-active"));
-    nav[type + 1].classList.add("is-active");
+    nav[type].classList.add("is-active");
   }, [type]);
 
   return (
     <>
       <Scene />
       <main>
+        <div class="noise"></div>
         <div className="frame">
           <h1 className="frame__title">Emerging Images</h1>
           <a className="frame__back" href="https://tympanus.net/codrops/?p=">
