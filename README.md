@@ -1,12 +1,12 @@
-# Connected Grid Layout Animation
+# Emerging WebGL Image Effects
 
-Some ideas for simple on-scroll animations for connected grid items.
+Some ideas for WebGL image effects where images emerge/appear.
 
-![Connected Grid Layout Animation](https://tympanus.net/codrops/wp-content/uploads/2023/08/ConnectedGrid_feat.jpg)
+![Emerging WebGL Image Effects]()
 
-[Article on Codrops](https://tympanus.net/codrops/?p=73283)
+[Article on Codrops](https://tympanus.net/codrops/?p=)
 
-[Demo](http://tympanus.net/Development/ConnectedGrid/)
+[Demo](http://tympanus.net/Development/EmergingImages/)
 
 ## Installation
 

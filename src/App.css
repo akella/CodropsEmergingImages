@@ -29,44 +29,12 @@ body {
 	margin: 0;
 	color: var(--color-text);
 	background-color: var(--color-bg);
-	font-family: "area-normal", sans-serif;
+	font-family: ui-monospace, monospace;
 	font-weight: 600;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	width: 100%;
 	overflow-x: hidden;
-}
-
-.demo-2 {
-	--color-text: #ffffff;
-    --color-bg: #750300;
-    --color-link: #e9807e;
-    --color-link-hover: #fff;
-    --color-title: #ffc982;
-    --color-year: #ffffff;
-}
-
-.demo-3 {
-	--s: 4;
-
-	--color-text: #f9e7ea;
-    --color-bg: #000000;
-    --color-link: #6e98e0;
-    --color-link-hover: #f9e7ea;
-    --color-title: #d29fbe;
-    --color-year: #6177b7;
-}
-
-.demo-4 {
-	--img-ratio: 1;
-	--s: 2;
-
-	--color-text: #000000;
-    --color-bg: #85827a;
-    --color-link: #c7bea7;
-    --color-link-hover: #000;
-    --color-title: #000000;
-    --color-year: #b9b3af;
 }
 
 /* Page Loader */
@@ -147,10 +115,9 @@ a:focus-visible {
 	position: relative;
 	padding: 2rem 3rem;
 	display: grid;
-	min-height: 400px;
 	width: 100%;
-	grid-template-columns: auto auto 1fr 1fr;
-	grid-template-areas: 'prev back ... sponsor' 'title title title title' 'demos demos demos demos' ;
+	grid-template-columns: min-content min-content auto 260px;
+	grid-template-areas: 'prev back sponsor ...' 'title title title title' 'demos demos demos demos'  ;
 	grid-row-gap: 1rem;
 	grid-column-gap: 2rem;
 	pointer-events: none;
@@ -173,11 +140,13 @@ a:focus-visible {
 .frame__back {
 	grid-area: back;
 	justify-self: start;
+	white-space: nowrap;
 }
 
 .frame__prev {
 	grid-area: prev;
 	justify-self: start;
+	white-space: nowrap;
 }
 
 .frame__demos {
@@ -188,24 +157,23 @@ a:focus-visible {
 	align-self: start;
 	flex-wrap: wrap;
 }
+
 .frame__demos-item{
 	cursor: pointer;
 }
+
 .frame__demos-item.is-active{
-	border:1px solid #fff;
+	border: 1px solid #fff;
 }
-.frame__demos-item:not(:first-child) {
-	width: 2rem;
+
+.frame__demos-item {
+	width: 2.5rem;
 	display: block;
 	flex: none;
-	border-radius: 10px;
+	border-radius: 50%;
 	aspect-ratio: 1;
 	display: grid;
 	place-items: center;
-}
-
-span.frame__demos-item:not(:first-child) {
-	border-color: #fff;
 }
 
 .grid {
@@ -215,6 +183,8 @@ span.frame__demos-item:not(:first-child) {
 	display: grid;
 	position: relative;
 	margin: 10vh auto 50vh;
+	padding: 0 3rem;
+	gap: 3vw;
 }
 
 .grid__item {
@@ -244,7 +214,7 @@ span.frame__demos-item:not(:first-child) {
 
 .grid__item-caption {
 	position: absolute;
-	padding: 0.5rem;
+	padding: 0.5rem 0;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;

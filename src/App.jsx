@@ -31,7 +31,7 @@ function App() {
             Previous demo
           </a>
           <nav className="frame__demos">
-            <span className="frame__demos-item">Variations </span>
+            <span className="frame__demos-title">Variations </span>
             <a
               className="frame__demos-item is-active"
               onClick={() => setType(0)}
