@@ -61,6 +61,24 @@
     </pre>
     <p>So, as you can see, we can just put our Three.js objects right into our HTML. And, as a bonus, we can use native HTML events to control them. This is a huge step forward in terms of integration of these two worlds. </p>
     <p>So for my demo i was able to use native IntersectionObserver API to run all the animations in WebGL!</p>
+    <h2>useGSAP</h2>
+    <p>Just recently GSAP released a nice hook for React, so i decided to use it as well. Having isIntersecting parameter from native IntersectionObserver API, i just did this:</p>
+    <pre>
+        import { useGSAP } from "@gsap/react";
+        import gsap from "gsap";
+        ...
+        useGSAP(() => {
+              gsap.to(material, {
+                uProgress: isIntersecting ? 1 : 0,
+                duration: 1.5,
+              });
+        }, [isIntersecting]);
+    </pre>
+    <p>This way the animation runs each time image pops into view.</p>
+    <p>It could be much more complicated of course, but in my case i only used "uProgress" uniform, and did all the magic inside shaders. To learn more about and gsap/react integration head over to <a href="https://gsap.com/resources/React/">official docs</a>.</p>
+
+    <h2>Scroll sync between HTML and WebGL</h2>
+
     <p>The last annoying bit is syncronisation issue between WebGL and HTML. Because those are still two different layers. All the WebGL is being rendered in fullscreen canvas on top of your page. These two worlds has to scroll together. And if you decide to use native scroll. Which is, well, natural. You will have a situation when HTML scrolls natively, and WebGL scrolls when it gets scroll event. </p>
     <p>You could imagine those are the same thing, but there will be a slight delay and jiggering between layers</p>
     <video src="post/jitter.mp4" autoplay muted loop></video>
