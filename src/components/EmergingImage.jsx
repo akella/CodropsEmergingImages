@@ -15,7 +15,7 @@ const PIXELS =  [1, 1.5, 2, 2.5, 3, 1, 1.5, 2, 2.5, 3, 3.5, 4, 2, 2.5, 3, 3.5, 4
 
 export default function EmergingImage({ ...props }) {
 
-    const { fillColor } = useControls({ fillColor: '#f60', })
+    const { fillColor } = useControls({ fillColor: '#403fb7', })
   
     const [refMesh, setRefMesh] = useState(null);
     const [texture, setTexture] = useState(null);

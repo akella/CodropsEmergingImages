@@ -2,11 +2,11 @@
 
 Some ideas for WebGL image effects where images emerge/appear.
 
-![Emerging WebGL Image Effects]()
+![Emerging WebGL Image Effects](https://tympanus.net/codrops/wp-content/uploads/2024/02/revealwebgl.gif)
 
-[Article on Codrops](https://tympanus.net/codrops/?p=)
+[Article on Codrops](https://tympanus.net/codrops/?p=75561)
 
-[Demo](http://tympanus.net/Development/EmergingImages/)
+[Demo](http://tympanus.net/Development/RevealingWebGLImages/)
 
 ## Installation
 

@@ -23,11 +23,11 @@ function App() {
       <Scene />
       <main>
         <div className="frame">
-          <h1 className="frame__title">Emerging Images</h1>
-          <a className="frame__back" href="https://tympanus.net/codrops/?p=">
+          <h1 className="frame__title">Revealing <br/>WebGL Images</h1>
+          <a className="frame__back" href="https://tympanus.net/codrops/?p=75561">
             Back to the article
           </a>
-          <a className="frame__prev" href="https://tympanus.net/Development/">
+          <a className="frame__prev" href="https://tympanus.net/Development/StickySections/">
             Previous demo
           </a>
           <nav className="frame__demos">
@@ -60,12 +60,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/1.jpg"
+                url="./img/1.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Warm Oasis Retreat</h3> <span>2023</span>
+              <h3>Embrace of Heat</h3> <span>2023</span>
             </figcaption>
           </figure>
           <figure
@@ -75,12 +75,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/2.jpg"
+                url="./img/2.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Desert Serenity Suites</h3> <span>2022</span>
+              <h3>Silence in Sand</h3> <span>2022</span>
             </figcaption>
           </figure>
           <figure
@@ -90,12 +90,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/3.jpg"
+                url="./img/3.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Sandscape Elegance</h3> <span>2024</span>
+              <h3>Whispers of Earth</h3> <span>2024</span>
             </figcaption>
           </figure>
           <figure
@@ -105,12 +105,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/4.jpg"
+                url="./img/4.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Dune Mirage Retreat</h3> <span>2021</span>
+              <h3>Mirage in Time</h3> <span>2021</span>
             </figcaption>
           </figure>
           <figure
@@ -120,24 +120,24 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/5.jpg"
+                url="./img/5.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Sahara Luxury Oasis</h3> <span>2023</span>
+              <h3>Veiled in Gold</h3> <span>2023</span>
             </figcaption>
           </figure>
           <figure className="grid__item" style={{ "--r": 6, "--c": 2 }}>
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/6.jpg"
+                url="./img/6.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Arabian Haven</h3> <span>2022</span>
+              <h3>Ancient Sands Speak</h3> <span>2022</span>
             </figcaption>
           </figure>
           <figure
@@ -147,12 +147,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/7.jpg"
+                url="./img/7.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Desert Dreamscape Lodges</h3> <span>2024</span>
+              <h3>Dreams of Dust</h3> <span>2024</span>
             </figcaption>
           </figure>
           <figure
@@ -162,12 +162,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/8.jpg"
+                url="./img/8.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Golden Sands Interiors</h3> <span>2021</span>
+              <h3>Gilded Sands Sing</h3> <span>2021</span>
             </figcaption>
           </figure>
           <figure
@@ -177,12 +177,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/9.jpg"
+                url="./img/9.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Desert Mirage Suites</h3> <span>2023</span>
+              <h3>Mirrored Illusions Fade</h3> <span>2023</span>
             </figcaption>
           </figure>
           <figure
@@ -192,12 +192,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/10.jpg"
+                url="./img/10.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Oasis Tranquility</h3> <span>2022</span>
+              <h3>Ripples in Time</h3> <span>2022</span>
             </figcaption>
           </figure>
           <figure
@@ -207,12 +207,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/11.jpg"
+                url="./img/11.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Desert Zen Retreat</h3> <span>2024</span>
+              <h3>Essence of Silence</h3> <span>2024</span>
             </figcaption>
           </figure>
           <figure
@@ -222,12 +222,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/12.jpg"
+                url="./img/12.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Sandscape Luxury</h3> <span>2021</span>
+              <h3>Luxury in Lines</h3> <span>2021</span>
             </figcaption>
           </figure>
           <figure
@@ -237,12 +237,12 @@ function App() {
             <div className="grid__item-img">
               <EmergingImage
                 type={type}
-                url="/img/13.jpg"
+                url="./img/13.jpg"
                 className="grid__item-img-inner"
               />
             </div>
             <figcaption className="grid__item-caption">
-              <h3>Desert Elegance Escapes</h3> <span>2023</span>
+              <h3>Escape in Shadows</h3> <span>2023</span>
             </figcaption>
           </figure>
         </div>
@@ -282,7 +282,7 @@ function App() {
           </div>
         </section>
         <p className="credits">
-          Made by <a href="https://twitter.com/codrops">@codrops</a>
+          Made by <a href="https://twitter.com/akella">@akella</a> for <a href="https://twitter.com/codrops">@codrops</a>
         </p>
       </main>
     </>
